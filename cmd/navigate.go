@@ -25,7 +25,6 @@ func Navigate(ctx context.Context, course int, subcourse int) error {
 	time.Sleep(100 * time.Millisecond)
 
 	for i := 1; i < subcourse+1; i++ {
-		nodes := []*cdp.Node{}
 
 		// サブコースの選択
 		if err := chromedp.Run(ctx,
@@ -35,22 +34,50 @@ func Navigate(ctx context.Context, course int, subcourse int) error {
 		}
 		time.Sleep(1 * time.Second)
 
-		// ユニット数の回収
-		if err := chromedp.Run(ctx,
-			chromedp.Nodes(`//*[@class="label label-success"]`, &nodes, chromedp.AtLeast(1)),
+		// ユニット数を取得
+		units := 0
+		if v, err := nodeCount(ctx,
+			`//*[@class="label label-success"]`, chromedp.AtLeast(1),
 		); err != nil {
-			return xerrors.Errorf("Failed to get units count: %w", err)
+			return err
+		} else {
+			units = v
 		}
-		units := len(nodes)
-		fmt.Println(units)
+		fmt.Printf("units: %d\n", units)
+		/*
+			if err := chromedp.Run(ctx,
+				chromedp.Nodes(`//*[@class="label label-success"]`, &nodes, chromedp.AtLeast(1)),
+			); err != nil {
+				return xerrors.Errorf("Failed to get units count: %w", err)
+			}
+			units := len(nodes)
+		*/
+
+		// リンクがあるユニットのノードを取得
+		nodes := 0
+		if v, err := nodeCount(ctx,
+			`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td`, chromedp.AtLeast(1),
+		); err != nil {
+			return err
+		} else {
+			nodes = v
+		}
+		fmt.Printf("nodes: %d\n", nodes)
 
 		// ユニットの選択
-		if err := chromedp.Run(ctx, chromedp.Nodes("a", &nodes)); err != nil {
-			return xerrors.Errorf("Failed to select units: %w", err)
-		}
-		for i := range nodes {
-			log.Println(nodes[len(nodes)-i].AttributeValue("href"))
-		}
+		/*
+			for i := 1; i < units+1; i++ {
+				if err := chromedp.Run(ctx,
+					chromedp.Nodes(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td`, &nodes),
+				); err != nil {
+					return xerrors.Errorf("Failed to select units: %w", err)
+				}
+				for _, n := range nodes {
+					log.Println(n.Attributes)
+				}
+				fmt.Println("ok")
+			}
+		*/
 
 		/*
 			unitID := "JT01"
@@ -83,7 +110,18 @@ func Navigate(ctx context.Context, course int, subcourse int) error {
 		*/
 	}
 
+	fmt.Println("end")
 	time.Sleep(10 * time.Second)
 	log.Printf("Finish Navigate\n\n")
 	return nil
+}
+
+func nodeCount(ctx context.Context, sel interface{}, opts ...chromedp.QueryOption) (int, error) {
+	nodes := []*cdp.Node{}
+	if err := chromedp.Run(ctx,
+		chromedp.Nodes(`//*[@class="label label-success"]`, &nodes, opts...),
+	); err != nil {
+		return -1, xerrors.Errorf("Failed to get nodes count: %w", err)
+	}
+	return len(nodes), nil
 }
