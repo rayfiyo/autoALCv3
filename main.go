@@ -8,6 +8,7 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/rayfiyo/autoALCv3/cmd"
 	"github.com/rayfiyo/autoALCv3/cmd/check"
+	"github.com/rayfiyo/autoALCv3/cmd/navigate"
 )
 
 func main() {
@@ -72,8 +73,14 @@ Loop:
 		}
 	}
 
-	if err := cmd.Navigate(ctx, course, subcourse); err != nil {
+	if err := navigate.MainCourse(ctx, course); err != nil {
 		log.Panic(err)
+	}
+
+	for i := 1; i < subcourse+1; i++ {
+		if err := navigate.SubCourse(ctx, i); err != nil {
+			log.Panic(err)
+		}
 	}
 
 	log.Println(`cat qnaSets/?.csv > "qnaSets/逆allSecQ.csv"`)
