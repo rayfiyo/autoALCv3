@@ -6,8 +6,8 @@ import (
 	"log"
 
 	"github.com/chromedp/chromedp"
-	"github.com/rayfiyo/autoALCv3/check"
 	"github.com/rayfiyo/autoALCv3/cmd"
+	"github.com/rayfiyo/autoALCv3/cmd/check"
 )
 
 func main() {

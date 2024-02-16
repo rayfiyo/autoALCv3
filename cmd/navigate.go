@@ -10,7 +10,7 @@ import (
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
 	"golang.org/x/xerrors"
-	//"github.com/rayfiyo/autoALCv3/debug"
+	//"github.com/rayfiyo/autoALCv3/cmd/debug"
 )
 
 func Navigate(ctx context.Context, course int, subcourse int) error {

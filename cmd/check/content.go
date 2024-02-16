@@ -6,7 +6,7 @@ import (
 	"errors"
 
 	"github.com/chromedp/chromedp"
-	//"github.com/rayfiyo/autoALCv3/debug"
+	//"github.com/rayfiyo/autoALCv3/cmd/debug"
 )
 
 func Content(ctx context.Context, xpath string, expectedText string) error {
