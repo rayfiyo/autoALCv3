@@ -11,7 +11,7 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/manifoldco/promptui"
 	"golang.org/x/xerrors"
-	//"github.com/rayfiyo/autoALCv3/debug"
+	// "github.com/rayfiyo/autoALCv3/cmd/debug"
 )
 
 func Login(ctx context.Context) error {
