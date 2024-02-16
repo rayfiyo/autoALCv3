@@ -9,50 +9,81 @@ import (
 
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
+	"golang.org/x/xerrors"
 	//"github.com/rayfiyo/autoALCv3/debug"
 )
 
-func Navigate(ctx context.Context, course int, subcourse int) {
+func Navigate(ctx context.Context, course int, subcourse int) error {
 	log.Printf("Start Navigate\n")
 
 	// コースの選択
 	if err := chromedp.Run(ctx,
 		chromedp.Click(`//*[@id="LbtSubCourseLink_`+fmt.Sprint(course)+`"]`, chromedp.NodeVisible),
 	); err != nil {
-		log.Fatal("Failed to select course")
+		return xerrors.Errorf("Failed to select course: %w", err)
 	}
 	time.Sleep(100 * time.Millisecond)
 
-	// onclick="ShowLearnPage('PWH_L03_U001-2','U001','10', '','UNIT001', '2', '&STCnt1=&STCnt2=&STCnt3=&STCnt4=')"
-	//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[214]/td[1]/a
 	for i := 1; i < subcourse+1; i++ {
+		nodes := []*cdp.Node{}
 
 		// サブコースの選択
 		if err := chromedp.Run(ctx,
 			chromedp.Click(`//*[@onclick="javascript: GoToStUnitList_Click('PWH_L0`+fmt.Sprint(i)+`')"]`, chromedp.NodeVisible),
 		); err != nil {
-			log.Fatal("Failed to select subcourse")
+			return xerrors.Errorf("Failed to select subcourse: %w", err)
 		}
 		time.Sleep(1 * time.Second)
 
 		// ユニット数の回収
-		var nodes []*cdp.Node
 		if err := chromedp.Run(ctx,
-			chromedp.Nodes(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr`, &nodes, chromedp.AtLeast(1)),
+			chromedp.Nodes(`//*[@class="label label-success"]`, &nodes, chromedp.AtLeast(1)),
 		); err != nil {
-			log.Fatal("Failed to select subcourse")
+			return xerrors.Errorf("Failed to get units count: %w", err)
 		}
-		units := 0
-		if course == 1 {
-			units = len(nodes) - 100
-		} else {
-			units = len(nodes)
-		}
+		units := len(nodes)
 		fmt.Println(units)
 
 		// ユニットの選択
+		if err := chromedp.Run(ctx, chromedp.Nodes("a", &nodes)); err != nil {
+			return xerrors.Errorf("Failed to select units: %w", err)
+		}
+		for i := range nodes {
+			log.Println(nodes[len(nodes)-i].AttributeValue("href"))
+		}
+
+		/*
+			unitID := "JT01"
+			for i := 0; i < units; i++ {
+				if err := chromedp.Run(ctx,
+		*/
+		//chromedp.Text(`//*/td[@rowspan="2"][1]`, &unitID),
+		/*
+				); err != nil {
+					return xerrors.Errorf("Failed to select subcourse: %w", err)
+				}
+			}
+		*/
+
+		/*
+			// a11y.QueryAXTree().Do(ctx)
+			var nodeID cdp.NodeID
+			fmt.Println(a11y.QueryAXTree().WithRole("link").WithNodeID(nodeID))
+			fmt.Println(nodeID)
+
+
+				chromedp.Evaluate(`document.querySelector('`+selector+`').getAttribute('role')`, &role),
+				// var a11y *accessibility.GetPartialAXTreeParams
+				a11y := accessibility.GetPartialAXTree(accessibility.GetPartialAXTree().
+					WithNodeID(accessibility.GetAXNodeAndAncestors().NodeID))
+				if course == 1 && unitID[:1] == "U" {
+				}
+				_ = a11y
+				// func (p QueryAXTreeParams) WithRole(role string) *QueryAXTreeParams {
+		*/
 	}
 
 	time.Sleep(10 * time.Second)
 	log.Printf("Finish Navigate\n\n")
+	return nil
 }

@@ -6,6 +6,7 @@ require (
 	github.com/chromedp/cdproto v0.0.0-20240214232516-ad4608604e9e
 	github.com/chromedp/chromedp v0.9.5
 	github.com/manifoldco/promptui v0.9.0
+	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
 )
 
 require (
