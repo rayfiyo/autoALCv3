@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/chromedp/cdproto/cdp"
@@ -25,30 +26,50 @@ func SubCourse(ctx context.Context, subCourse int) error {
 	time.Sleep(1 * time.Second)
 
 	// ユニット数を取得
-	units := 0
-	if v, err := nodeCount(ctx,
+	unitNum, err := nodeCount(ctx,
 		`//*[@class="label label-success"]`, chromedp.AtLeast(7),
-	); err != nil {
+	)
+	if err != nil {
 		return err
-	} else {
-		units = v
 	}
-	fmt.Printf("units: %d\n", units)
 
 	// リンクがある行数（ノード数）を取得
-	nodes := 0
-	if v, err := nodeCount(ctx,
+	nodeNum, err := nodeCount(ctx,
 		`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr`, chromedp.AtLeast(7),
-	); err != nil {
+	)
+	if err != nil {
 		return err
-	} else {
-		nodes = v
 	}
-	fmt.Printf("nodes: %d\n", nodes)
 
-	// ユニットの選択
+	// ユニットの選択と処理
+	if unitNum != nodeNum { // PowerWords Hybridコース 用
+		for i := 1; i < nodeNum; i++ {
+			linkText := "txt"
+			if err := chromedp.Run(ctx,
+				// chromedp.Text(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[3]`, &linkText),
+				chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[3]`, &linkText),
+			); err != nil {
+				return xerrors.Errorf("Failed to filter input: %w", err)
+			}
+			if !strings.Contains(linkText, "Input") {
+				// ここから書く１
+				// Input以外のユニットの選択と処理
+				log.Print(i, linkText, "\n")
+			}
+		}
+	} else { // TOEIC(R) L&R テスト 500点突破コース 用
+		if err := chromedp.Run(ctx,
+			// ここから書く２
+			// ユニットの選択と処理
+			chromedp.Click(``, chromedp.NodeVisible),
+		); err != nil {
+			return xerrors.Errorf("Failed to select units: %w", err)
+		}
+	}
 
-	fmt.Println("end")
+	fmt.Printf("unitNum: %d\n", unitNum)
+	fmt.Printf("nodeNum: %d\n", nodeNum)
+
 	time.Sleep(10 * time.Second)
 	log.Printf("Finish navigating subcourse\n\n")
 	return nil
@@ -56,11 +77,9 @@ func SubCourse(ctx context.Context, subCourse int) error {
 
 func nodeCount(ctx context.Context, sel interface{}, opts ...chromedp.QueryOption) (int, error) {
 	nodes := []*cdp.Node{}
-	if err := chromedp.Run(ctx,
-		chromedp.Nodes(sel, &nodes, opts...),
-	); err != nil {
+	err := chromedp.Run(ctx, chromedp.Nodes(sel, &nodes, opts...))
+	if err != nil {
 		return -1, xerrors.Errorf("Failed to get nodes count: %w", err)
 	}
-	log.Print(nodes)
 	return len(nodes), nil
 }

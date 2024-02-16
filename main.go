@@ -83,6 +83,5 @@ Loop:
 		}
 	}
 
-	log.Println(`cat qnaSets/?.csv > "qnaSets/逆allSecQ.csv"`)
 	log.Println("All done.")
 }
