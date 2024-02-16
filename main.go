@@ -40,15 +40,16 @@ func main() {
 	log.Println("Start access to top page")
 	if err := chromedp.Run(ctx,
 		chromedp.Navigate("https://nanext.alcnanext.jp/anetn/Student/stlogin/index/nit-ariake/")); err != nil {
-		log.Panic("Error: Failed access to top page")
+		log.Panic("Error: Failed access to top page\n" + fmt.Sprintln(err))
 	}
 	fmt.Println("End of access to top page")
 
 	// login
-	cmd.Login(ctx)
-	if err := check.URL(ctx, "https://nanext.alcnanext.jp/anetn/Student/StTop"); err != nil {
-		log.Println("ID か パスワードが間違っている可能性があります")
+	if err := cmd.Login(ctx); err != nil {
 		log.Panic(err)
+	}
+	if err := check.URL(ctx, "https://nanext.alcnanext.jp/anetn/Student/StTop"); err != nil {
+		log.Panic(fmt.Sprintln(err) + "ID か パスワードが間違っている可能性があります")
 	}
 
 	// select question
@@ -71,7 +72,9 @@ Loop:
 		}
 	}
 
-	cmd.Navigate(ctx, course, subcourse)
+	if err := cmd.Navigate(ctx, course, subcourse); err != nil {
+		log.Panic(err)
+	}
 
 	log.Println(`cat qnaSets/?.csv > "qnaSets/逆allSecQ.csv"`)
 	log.Println("All done.")
