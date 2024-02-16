@@ -39,7 +39,6 @@ func SubCourse(ctx context.Context, subCourse int) error {
 	nodes := 0
 	if v, err := nodeCount(ctx,
 		`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr`, chromedp.AtLeast(7),
-		// `//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td`, chromedp.AtLeast(7),
 	); err != nil {
 		return err
 	} else {
