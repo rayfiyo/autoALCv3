@@ -1,4 +1,5 @@
 // ログイン処理
+
 package cmd
 
 import (
@@ -11,8 +12,26 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/manifoldco/promptui"
 	"golang.org/x/xerrors"
-	// "github.com/rayfiyo/autoALCv3/cmd/debug"
 )
+
+func passwdInputer(labelMessage string) (string, error) {
+	// validate := func(input string) error {
+	// return nil
+	// }
+
+	prompt := promptui.Prompt{
+		Label: labelMessage,
+		// Validate: validate,
+		Mask: '*',
+	}
+
+	passwd, err := prompt.Run()
+	if err != nil {
+		return passwd, xerrors.Errorf("Failed to run prompt: %w", err)
+	}
+
+	return passwd, nil
+}
 
 func Login(ctx context.Context) error {
 	log.Printf("Start Login\n")
@@ -40,23 +59,4 @@ func Login(ctx context.Context) error {
 
 	log.Printf("Finish Login\n\n")
 	return nil
-}
-
-func passwdInputer(labelMessage string) (string, error) {
-	// validate := func(input string) error {
-	// return nil
-	// }
-
-	prompt := promptui.Prompt{
-		Label: labelMessage,
-		// Validate: validate,
-		Mask: '*',
-	}
-
-	passwd, err := prompt.Run()
-	if err != nil {
-		return passwd, xerrors.Errorf("Failed to run prompt: %w", err)
-	}
-
-	return passwd, nil
 }

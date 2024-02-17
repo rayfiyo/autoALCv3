@@ -20,7 +20,7 @@ func MainCourse(ctx context.Context, course int) error {
 	); err != nil {
 		return xerrors.Errorf("Failed to select course: %w", err)
 	}
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(120 * time.Millisecond)
 
 	log.Printf("Finish navigating course\n\n")
 	return nil
