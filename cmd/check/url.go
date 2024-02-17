@@ -6,19 +6,17 @@ import (
 
 	"github.com/chromedp/chromedp"
 	"golang.org/x/xerrors"
-	//"github.com/rayfiyo/autoALCv3/debug"
 )
 
 func URL(ctx context.Context, expectedURL string) error {
-	// getURL := "https://dummy"
-	var getURL string
-	if err := chromedp.Run(ctx, chromedp.Location(&getURL)); err != nil {
+	receivedURL := "http://dummy"
+	if err := chromedp.Run(ctx, chromedp.Location(&receivedURL)); err != nil {
 		return xerrors.Errorf("Transition check fails on URL: %w", err)
 	}
 
-	if expectedURL == getURL {
+	if expectedURL == receivedURL {
 		return nil
 	} else {
-		return xerrors.Errorf("Transition check fails: Getting text is %s", getURL)
+		return xerrors.Errorf("Transition check fails: Expected URL is %s, but the one received was %s", expectedURL, receivedURL)
 	}
 }
