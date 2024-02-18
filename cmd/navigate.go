@@ -1,4 +1,5 @@
 // コースまでの遷移（ナビゲーション）
+
 package cmd
 
 import (
@@ -31,7 +32,7 @@ func tc1(ctx context.Context, subcID int) error {
 	return nil
 }
 
-func Navigate(ctx context.Context, crsID int, subcID int) error {
+func Navigate(ctx context.Context, crsID, subcID int) error {
 	log.Printf("Start navigation\n")
 
 	// コースの選択
@@ -45,6 +46,8 @@ func Navigate(ctx context.Context, crsID int, subcID int) error {
 	// サブコースの選択
 	switch crsID {
 	case 1:
+		subcID = 3 // デバック用
+
 		// PowerWords Hybridコース
 		if err := pwh(ctx, subcID); err != nil {
 			return err
@@ -56,7 +59,7 @@ func Navigate(ctx context.Context, crsID int, subcID int) error {
 		}
 	}
 
-	time.Sleep(1 * time.Second) // 遷移待ち（短いかも）
+	time.Sleep(2 * time.Second) // 遷移待ち
 
 	log.Printf("Finish navigation\n\n")
 	return nil
