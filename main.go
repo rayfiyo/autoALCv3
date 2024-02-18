@@ -6,8 +6,9 @@ import (
 	"log"
 
 	"github.com/chromedp/chromedp"
-	"github.com/rayfiyo/autoALCv3/check"
 	"github.com/rayfiyo/autoALCv3/cmd"
+	"github.com/rayfiyo/autoALCv3/cmd/check"
+	"github.com/rayfiyo/autoALCv3/cmd/tasks"
 )
 
 func main() {
@@ -49,22 +50,22 @@ func main() {
 		log.Panic(err)
 	}
 	if err := check.URL(ctx, "https://nanext.alcnanext.jp/anetn/Student/StTop"); err != nil {
-		log.Panic(fmt.Sprintln(err) + "ID か パスワードが間違っている可能性があります")
+		log.Panic("ID か パスワードが間違っている可能性があります\n" + fmt.Sprintln(err))
 	}
 
-	// select question
+	// コースの選択
 	course := 0
-	subcourse := 0
+	subcourseNum := 0
 	fmt.Printf("コースの選択\nPowerWords Hybridコース -------------> 1\nTOEIC(R) L&R テスト 500点突破コース -> 2\n")
 	fmt.Scanln(&course)
 Loop:
 	for i := 0; ; i++ {
 		switch course {
 		case 1:
-			subcourse = 6
+			subcourseNum = 6
 			break Loop
 		case 2:
-			subcourse = 5
+			subcourseNum = 5
 			break Loop
 		default:
 			fmt.Printf("1 or 2: ")
@@ -72,10 +73,45 @@ Loop:
 		}
 	}
 
-	if err := cmd.Navigate(ctx, course, subcourse); err != nil {
-		log.Panic(err)
+	// 問題を解く処理
+	for subCrs := 1; subCrs < subcourseNum+1; subCrs++ {
+		// コース・サブコースの遷移
+		if err := cmd.Navigate(ctx, course, subCrs); err != nil {
+			log.Panic(err)
+		}
+
+		// 遷移の確認
+		if err := check.URL(ctx, "https://nanext.alcnanext.jp/anetn/Student/StUnitList"); err != nil {
+			log.Panic("コース・サブコースの選択に失敗\n" + fmt.Sprintln(err))
+		}
+
+		// ユニット数を取得
+		unitNum, err := cmd.NodeCount(ctx, `//*[@class="label label-success"]`, chromedp.AtLeast(7))
+		if err != nil {
+			log.Panic(err)
+		}
+
+		// リンクがある行数（ノード数）を取得
+		nodeNum, err := cmd.NodeCount(ctx, `//*[@id="nan-contents"]/div[7]/div/table/tbody/tr`, chromedp.AtLeast(7))
+		if err != nil {
+			log.Panic(err)
+		}
+
+		// ユニットの選択と処理
+		if unitNum != nodeNum {
+			// PowerWords Hybridコース 用
+			if err := tasks.PWH(ctx, unitNum, nodeNum); err != nil {
+				log.Panic(err)
+			}
+		} else {
+			// TOEIC(R) L&R テスト 500点突破コース 用
+			/*
+				if err := tasks.TC1(ctx, unitNum, nodeNum); err != nil {
+					log.Panic(err)
+				}
+			*/
+		}
 	}
 
-	log.Println(`cat qnaSets/?.csv > "qnaSets/逆allSecQ.csv"`)
 	log.Println("All done.")
 }
