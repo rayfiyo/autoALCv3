@@ -100,7 +100,7 @@ func main() {
 	subCourse = 1
 	unitCount = 28
 
-	for i := 8; i < unitCount+1; i++ {
+	for i := 10; i < unitCount+1; i++ {
 		for {
 			start(sID, subCourse, i)
 
