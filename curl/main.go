@@ -11,8 +11,6 @@ import (
 
 func start(sID string, subCourse, unit int) {
 	// クライアント作成・リクエストヘッダの作成
-	// {"Qtype":"","VId":"ALC","CId":"TC1","SId":"TC1_S1","UId":"TC1_S1_U003-1","SessionId":"edtpr0osamkoiyxaymxk5kum"}
-
 	client := &http.Client{}
 	data := strings.NewReader(
 		`{"Qtype":"","VId":"ALC","CId":"TC1","SId":"TC1_S` + fmt.Sprint(subCourse) + `","UId":"TC1_S` + fmt.Sprint(subCourse) + `_U00` + fmt.Sprint(unit) + `-1","SessionId":"` + sID + `"}`)
@@ -49,12 +47,10 @@ func end(sID string, subCourse, unit int) {
 	fmt.Scanln(&sdate)
 
 	// クライアント作成・リクエストヘッダの作成
-	// {"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[{"SOrder":"1","SFlag":"1","Voca":"1"},{"SOrder":"2","SFlag":"1","Voca":"1"},{"SOrder":"3","SFlag":"1","Voca":"1"}]}},"SDate":"20240226231235558","Skill":"30,0,0,0,0,0","VId":"ALC","CId":"TC1","SId":"TC1_S1","UId":"TC1_S1_U003-1","SessionId":"edtpr0osamkoiyxaymxk5kum"}
-
 	client := &http.Client{}
 	data := strings.NewReader(
 		`{"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[{"SOrder":"1","SFlag":"1","Voca":"1"},{"SOrder":"2","SFlag":"1","Voca":"1"},{"SOrder":"3","SFlag":"1","Voca":"1"}]}},"SDate":"` + sdate + `","Skill":"30,0,0,0,0,0","VId":"ALC","CId":"TC1","SId":"TC1_S` + fmt.Sprint(subCourse) + `","UId":"TC1_S` + fmt.Sprint(subCourse) + `_U00` + fmt.Sprint(unit) + `-1","SessionId":"` + sID + `"}`)
-	log.Println(data)
+	// log.Println(data)
 	req, err := http.NewRequest("POST", "https://nanext.alcnanext.jp/anetn/api/HistoryApi/registLearnHistory", data)
 	if err != nil {
 		log.Fatal(err)
