@@ -66,7 +66,7 @@ func PWH(ctx context.Context, unitNum, nodeNum int) error {
 	// ユニットの選択と処理
 	for i := 1; i < nodeNum; i++ {
 
-		// ユニットの仕分けの為にリンクテキストを取得
+		// ユニットの仕分けの為に，３列目のリンクテキストを取得
 		linkText := "txt"
 		if err := chromedp.Run(ctx,
 			chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[3]`, &linkText),
@@ -75,35 +75,36 @@ func PWH(ctx context.Context, unitNum, nodeNum int) error {
 		}
 		linkText = strings.TrimSpace(linkText)
 
+		// 修了済みか確認する為に．ステータスの文字列を取得
+		status := "txt"
+		if err := chromedp.Run(ctx,
+			chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[2]`, &status),
+		); err != nil {
+			return xerrors.Errorf("Failed to filter input: %w", err)
+		}
+		status = strings.TrimSpace(status)
+
 		// ユニット毎の選択と処理
 		if linkText == "" { // 実力テスト・確認テスト
-			// Unit の選択
-			if err := chromedp.Run(ctx,
-				chromedp.Click(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[2]/span[2]/a`,
-					chromedp.NodeVisible),
-			); err != nil {
-				return xerrors.Errorf("Failed to click on test unit: %w", err)
-			}
-
-			// Unit の処理
-			if err := killUnit(ctx); err != nil {
-				return err
-			}
+			// やらなくて良さげなので，何もしない
+			// chromedp.Click(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[2]/span[2]/a`,
 		} else if linkText == "-" { // ドリル
-			// Unit の選択
-			if err := chromedp.Run(ctx,
-				chromedp.Click(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[1]/a`,
-					chromedp.NodeVisible),
-			); err != nil {
-				return xerrors.Errorf("Failed to click on drill unit: %w", err)
-			}
+			if status != "修了 / Completed" { // 修了済みではないなら解く
+				// Unit の選択
+				if err := chromedp.Run(ctx,
+					chromedp.Click(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(i)+`]/td[1]/a`,
+						chromedp.NodeVisible),
+				); err != nil {
+					return xerrors.Errorf("Failed to click on drill unit: %w", err)
+				}
 
-			// Unit の処理
-			if err := killUnit(ctx); err != nil {
-				return err
+				// Unit の処理
+				if err := killUnit(ctx); err != nil {
+					return err
+				}
 			}
 		} else if linkText == "インプット / Input" {
-			// インプット は 何もしない
+			// インプット はしなくて良い
 		} else {
 			return xerrors.Errorf("Unexpected Units: %s", linkText)
 		}
