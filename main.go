@@ -8,7 +8,7 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/rayfiyo/autoALCv3/cmd"
 	"github.com/rayfiyo/autoALCv3/cmd/check"
-	"github.com/rayfiyo/autoALCv3/cmd/tasks"
+	// "github.com/rayfiyo/autoALCv3/cmd/tasks"
 )
 
 func main() {
@@ -98,19 +98,22 @@ Loop:
 		}
 
 		// ユニットの選択と処理
-		if unitNum != nodeNum {
-			// PowerWords Hybridコース 用
-			if err := tasks.PWH(ctx, unitNum, nodeNum); err != nil {
-				log.Panic(err)
-			}
-		} else {
-			// TOEIC(R) L&R テスト 500点突破コース 用
-			/*
-				if err := tasks.TC1(ctx, unitNum, nodeNum); err != nil {
+		if _, err := cmd.GetUId(ctx, unitNum, nodeNum); err != nil {
+			log.Panic(err)
+		}
+		/*
+			if unitNum != nodeNum {
+				// PowerWords Hybridコース 用
+				if err := tasks.PWH(ctx, unitNum, nodeNum); err != nil {
 					log.Panic(err)
 				}
-			*/
-		}
+			} else {
+				// TOEIC(R) L&R テスト 500点突破コース 用
+					if err := tasks.TC1(ctx, unitNum, nodeNum); err != nil {
+						log.Panic(err)
+					}
+			}
+		*/
 	}
 
 	log.Println("All done.")
