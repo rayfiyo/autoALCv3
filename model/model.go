@@ -1,4 +1,4 @@
-package main
+package model
 
 type Id struct {
 	CId string // ex. TC1

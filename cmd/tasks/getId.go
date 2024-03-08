@@ -11,17 +11,12 @@ import (
 
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
+	"github.com/rayfiyo/autoALCv3/model"
 	"golang.org/x/xerrors"
 )
 
-type Id struct {
-	CId string // ex. TC1
-	SId string // ex. TC1_S1
-	UId string // ex. TC1_S1_U003-1
-}
-
-func GetId(ctx context.Context, selNode int) (Id, error) {
-	id := Id{CId: "ex.TC1", SId: "ex.TC1_S1", UId: "ex.TC1_S1_U003-1"}
+func GetId(ctx context.Context, selNode int) (model.Id, error) {
+	id := model.Id{CId: "ex.TC1", SId: "ex.TC1_S1", UId: "ex.TC1_S1_U003-1"}
 
 	log.Printf("Start tasks\n")
 	time.Sleep(1 * time.Second) // 読み込み待ち
