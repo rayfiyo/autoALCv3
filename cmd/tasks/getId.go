@@ -1,4 +1,4 @@
-// ユニットを解くために必要なIdを取得
+// submit に必要な Id を取得
 
 package tasks
 
@@ -20,11 +20,12 @@ func GetId(ctx context.Context, selNode int) (model.Id, error) {
 
 	id := model.Id{CId: "ex.TC1", SId: "ex.TC1_S1", UId: "ex.TC1_S1_U003-1"}
 
-	time.Sleep(1 * time.Second) // 読み込み待ち
+	// 読み込み待ち
+	time.Sleep(1 * time.Second)
 
 	// 修了済みか確認する為に．ステータスの文字列を取得
-	status2 := "修了（ステータスが２列目にある場合）"
-	status4 := "-（ステータスが４列目にある場合）"
+	status2 := "例: 修了（ステータスが２列目にある場合用）"
+	status4 := "例: -（ステータスが４列目にある場合用）"
 	if err := chromedp.Run(ctx,
 		chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[2]`, &status2),
 		chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[4]`, &status4),
@@ -61,6 +62,7 @@ func GetId(ctx context.Context, selNode int) (model.Id, error) {
 		}
 	} else {
 		log.Println("修了済み")
+		// ことの時 id は初期値のまま
 	}
 
 	log.Printf("End of getting ID\n\n")
