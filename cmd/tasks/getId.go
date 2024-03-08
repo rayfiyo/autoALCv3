@@ -44,20 +44,27 @@ func GetId(ctx context.Context, selNode int) (model.Id, error) {
 			return id, xerrors.Errorf("Failed to click on drill unit: %w", err)
 		}
 
-		rawValue := "ex.PWH_L03_JT01-1','JT01"
+		onclickValue := "ex.ShowLearnPage('PWH_L03_U024-2','U024','10', '','UNIT024', '2', '&STCnt1=&STCnt2=&STCnt3=&STCnt4=')"
 		for _, n := range nodes {
-			rawValue = string([]rune(n.AttributeValue("onclick"))[15:36]) // SIdが３桁の場合を考え少し長めに切る
+			onclickValue = n.AttributeValue("onclick")
 		}
 
-		for i := 0; i+1 < len(rawValue); i++ {
-			if string([]rune(rawValue)[i:i+1]) == "_" {
-				if id.CId == "ex.TC1" { // id.CIdが初期値なら最初の"_"
-					id.CId = string([]rune(rawValue)[:i])
+
+		// トリミング
+		rawId := string([]rune(onclickValue)[15:36]) // SIdが３桁の場合などを考え少し長めに切る．例: PWH_L03_JT01-1','JT01
+		// stcnt := string([]rune(onclickValue)[len:])
+		
+		// STCnt1= を数えるコードを書く
+
+		for i := 0; i+1 < len(rawId); i++ {
+			if string([]rune(rawId)[i:i+1]) == "_" {
+				if id.CId == "ex.TC1" { // id.CIdが初期値なら最初の"_"だからCIdに代入
+					id.CId = string([]rune(rawId)[:i])
 				} else {
-					id.SId = string([]rune(rawValue)[:i])
+					id.SId = string([]rune(rawId)[:i])
 				}
-			} else if string([]rune(rawValue)[i:i+1]) == "'" {
-				id.UId = string([]rune(rawValue)[:i-2])
+			} else if string([]rune(rawId)[i:i+1]) == "'" {
+				id.UId = string([]rune(rawId)[:i-2])
 			}
 		}
 	} else {
