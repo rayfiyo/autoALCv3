@@ -16,9 +16,10 @@ import (
 )
 
 func GetId(ctx context.Context, selNode int) (model.Id, error) {
+	log.Printf("Start of getting Id\n")
+
 	id := model.Id{CId: "ex.TC1", SId: "ex.TC1_S1", UId: "ex.TC1_S1_U003-1"}
 
-	log.Printf("Start tasks\n")
 	time.Sleep(1 * time.Second) // 読み込み待ち
 
 	// 修了済みか確認する為に．ステータスの文字列を取得
@@ -55,19 +56,13 @@ func GetId(ctx context.Context, selNode int) (model.Id, error) {
 					id.SId = string([]rune(rawValue)[:i])
 				}
 			} else if string([]rune(rawValue)[i:i+1]) == "'" {
-				id.UId = string([]rune(rawValue)[:i])
+				id.UId = string([]rune(rawValue)[:i-2])
 			}
 		}
-
-		// log.Print("2: ", status2, ", 4: ", status4, "\n")
-		// log.Printf("CId: %s, SId: %s, UId %s\n", id.CId, id.SId, id.UId)
 	} else {
 		log.Println("修了済み")
 	}
 
-	log.Printf("ユニット%dのタスク完了", selNode)
-
-	log.Printf("Finish tasks\n\n")
-	time.Sleep(1 * time.Minute)
+	log.Printf("End of getting ID\n\n")
 	return id, nil
 }
