@@ -1,4 +1,4 @@
-// コースまでの遷移（ナビゲーション）
+// コースまでの遷移 (navigate)
 
 package cmd
 
@@ -46,8 +46,6 @@ func Navigate(ctx context.Context, crsID, subcID int) error {
 	// サブコースの選択
 	switch crsID {
 	case 1:
-		subcID = 3 // デバック用
-
 		// PowerWords Hybridコース
 		if err := pwh(ctx, subcID); err != nil {
 			return err
