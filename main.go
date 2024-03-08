@@ -8,7 +8,7 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/rayfiyo/autoALCv3/cmd"
 	"github.com/rayfiyo/autoALCv3/cmd/check"
-	// "github.com/rayfiyo/autoALCv3/cmd/tasks"
+	"github.com/rayfiyo/autoALCv3/cmd/tasks"
 )
 
 func main() {
@@ -85,12 +85,6 @@ Loop:
 			log.Panic("コース・サブコースの選択に失敗\n" + fmt.Sprintln(err))
 		}
 
-		// ユニット数を取得
-		unitNum, err := cmd.NodeCount(ctx, `//*[@class="label label-success"]`, chromedp.AtLeast(7))
-		if err != nil {
-			log.Panic(err)
-		}
-
 		// リンクがある行数（ノード数）を取得
 		nodeNum, err := cmd.NodeCount(ctx, `//*[@id="nan-contents"]/div[7]/div/table/tbody/tr`, chromedp.AtLeast(7))
 		if err != nil {
@@ -98,22 +92,11 @@ Loop:
 		}
 
 		// ユニットの選択と処理
-		if _, err := cmd.GetUId(ctx, unitNum, nodeNum); err != nil {
-			log.Panic(err)
-		}
-		/*
-			if unitNum != nodeNum {
-				// PowerWords Hybridコース 用
-				if err := tasks.PWH(ctx, unitNum, nodeNum); err != nil {
-					log.Panic(err)
-				}
-			} else {
-				// TOEIC(R) L&R テスト 500点突破コース 用
-					if err := tasks.TC1(ctx, unitNum, nodeNum); err != nil {
-						log.Panic(err)
-					}
+		for i := 1; i < nodeNum; i++ {
+			if _, err := tasks.GetId(ctx, i); err != nil {
+				log.Panic(err)
 			}
-		*/
+		}
 	}
 
 	log.Println("All done.")
