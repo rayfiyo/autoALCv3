@@ -15,7 +15,7 @@ import (
 
 func main() {
 	// Chrome のインスタンス作成
-	/* Release:
+	// /* Release:
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("enable-automation", false),
 		chromedp.WindowSize(1024, 576),
@@ -27,7 +27,7 @@ func main() {
 	/* Debug: Log only
 	ctx, cancel := chromedp.NewContext(context.Background(), chromedp.WithDebugf(log.Printf)) // */
 
-	// /* Debug: No Headless
+	/* Debug: No Headless
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("headless", false),
 		chromedp.Flag("enable-automation", false),
