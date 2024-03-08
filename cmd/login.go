@@ -38,7 +38,7 @@ func Login(ctx context.Context) error {
 
 	// クレデンシャルの入力要求
 	id := "ID"
-	fmt.Printf("ID:")
+	fmt.Print("ID: ")
 	fmt.Scan(&id)
 
 	if passwd, err := passwdInputer("Password: "); err != nil {
