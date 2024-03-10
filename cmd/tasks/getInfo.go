@@ -16,7 +16,10 @@ import (
 )
 
 func GetInfo(ctx context.Context, selNode int) (model.Id, int, error) {
-	log.Printf("Start of getting Id\n")
+	log.Println("Start  of getting info")
+
+	// chromedp の ノードを格納する変数
+	var nodes []*cdp.Node
 
 	// 返り値の初期化
 	id := model.Id{UId: "ex.TC1_S1_U003-1", SId: "ex.TC1_S1", CId: "ex.TC1", SessId: "barbar"}
@@ -26,7 +29,6 @@ func GetInfo(ctx context.Context, selNode int) (model.Id, int, error) {
 	time.Sleep(1 * time.Second)
 
 	// Cookie(ASP.NET_SessionId) の取得のために，それが記述してあるHTMLタグのnodeを取得
-	var nodes []*cdp.Node
 	if err := chromedp.Run(ctx, chromedp.Nodes(`//*[@id="HidSessionId"]`, &nodes)); err != nil {
 		log.Panic("Failed to get nodes of HidSessionId: %w", err)
 	}
@@ -39,21 +41,47 @@ func GetInfo(ctx context.Context, selNode int) (model.Id, int, error) {
 		log.Panic("Failed to get session ID.")
 	}
 
-	// 修了済みか確認する為に．ステータスの文字列を取得
-	status2 := "例: 修了（ステータスが２列目にある場合用）"
-	status4 := "例: -（ステータスが４列目にある場合用）"
+	// 修了済みか確認するための ２列目があるか調べるためにノードを取得
 	if err := chromedp.Run(ctx,
-		chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[2]`, &status2),
-		chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[4]`, &status4),
+		chromedp.Nodes(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[2]`, &nodes, chromedp.AtLeast(0)),
 	); err != nil {
-		return id, stCnt, xerrors.Errorf("Failed to get status: %w", err)
+		return id, stCnt, xerrors.Errorf("Failed to get node of status2: %w", err)
+	}
+
+	// 配列の長さが０じゃない，つまり２列目がある場合 文字列取得
+	status2 := "例: 修了（ステータスが２列目にある場合用）"
+	if len(nodes) != 0 {
+		if err := chromedp.Run(ctx,
+			chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[2]`,
+				&status2),
+		); err != nil {
+			return id, stCnt, xerrors.Errorf("Failed to get text of status2: %w", err)
+		}
 	}
 	status2 = strings.TrimSpace(status2)
+
+	// 修了済みか確認するための ４列目があるか調べるためにノードを取得
+	if err := chromedp.Run(ctx,
+		chromedp.Nodes(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[4]`, &nodes, chromedp.AtLeast(0)),
+	); err != nil {
+		return id, stCnt, xerrors.Errorf("Failed to get node of status4: %w", err)
+	}
+
+	// 配列の長さが０じゃない，つまり４列目がある場合 文字列取得
+	status4 := "例: -（ステータスが４列目にある場合用）"
+	if len(nodes) != 0 {
+		if err := chromedp.Run(ctx,
+			chromedp.TextContent(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]/td[4]`,
+				&status4),
+		); err != nil {
+			return id, stCnt, xerrors.Errorf("Failed to get text of status4: %w", err)
+		}
+	}
 	status4 = strings.TrimSpace(status4)
 
 	// 修了済みではないなら，ShowLearnPage() の引数より Id を取得
 	if status2 != "修了 / Completed" && status4 != "修了 / Completed" {
-		var nodes []*cdp.Node
+		// onclick が書かれているタグのノードを取得
 		if err := chromedp.Run(ctx,
 			chromedp.Nodes(`//*[@id="nan-contents"]/div[7]/div/table/tbody/tr[`+fmt.Sprint(selNode)+`]//a`, &nodes),
 		); err != nil {
@@ -111,9 +139,9 @@ func GetInfo(ctx context.Context, selNode int) (model.Id, int, error) {
 			stCnt = 1
 		}
 	} else {
-		log.Println("修了済み") // id は初期値のまま
+		log.Println("修了済み として処理") // id は初期値のまま
 	}
 
-	log.Printf("End of getting ID\n\n")
+	log.Println("Finish of getting info")
 	return id, stCnt, nil
 }

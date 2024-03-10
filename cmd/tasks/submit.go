@@ -112,7 +112,7 @@ func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 }
 
 func Submit(id model.Id, stCnt int) error {
-	log.Printf("Start of unit submission\n")
+	log.Println("Start  of unit submission")
 	sdate := "ex.20240226231235558"
 
 	for i := 0; ; i++ {
@@ -195,6 +195,6 @@ func Submit(id model.Id, stCnt int) error {
 	}
 	time.Sleep(1 * time.Second)
 
-	log.Printf("Finish of unit submission\n\n")
+	log.Println("Finish of unit submission")
 	return nil
 }

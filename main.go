@@ -40,12 +40,12 @@ func main() {
 	defer cancel()
 
 	// アクセス
-	log.Println("Start access to top page")
+	log.Println("Start     access to top page")
 	if err := chromedp.Run(ctx,
 		chromedp.Navigate("https://nanext.alcnanext.jp/anetn/Student/stlogin/index/nit-ariake/")); err != nil {
 		log.Panic("Error: Failed access to top page", err)
 	}
-	log.Println("End of access to top page")
+	log.Println("Finish of access to top page")
 
 	// ログイン
 	if err := cmd.Login(ctx); err != nil {
@@ -101,8 +101,8 @@ Loop:
 
 	// ユニットの選択と処理
 	for i := 1; i < nodeNum+1; i++ {
-		log.Println("- * - * - * - * -")
-		log.Printf("%d/%d開始\n\n", i, nodeNum)
+		log.Printf("- * - * - * - * -\n")
+		log.Printf("%d/%d 開始\n", i, nodeNum)
 
 		id, stcnt, err := tasks.GetInfo(ctx, i)
 		if err != nil {
@@ -115,7 +115,7 @@ Loop:
 			}
 		}
 
-		log.Printf("%d/%d完了", i, nodeNum)
+		log.Printf("%d/%d 完了\n", i, nodeNum)
 		log.Printf("- * - * - * - * -\n\n")
 	}
 
