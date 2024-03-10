@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
 	"github.com/rayfiyo/autoALCv3/cmd"
 	"github.com/rayfiyo/autoALCv3/cmd/check"
 	"github.com/rayfiyo/autoALCv3/cmd/tasks"
-	"github.com/rayfiyo/autoALCv3/model"
 )
 
 func main() {
@@ -99,28 +97,20 @@ Loop:
 		log.Panic(err)
 	}
 
-	// Cookie(ASP.NET_SessionId) の取得のために，それが記述してあるHTMLタグのnodeを取得
-	var nodes []*cdp.Node
-	if err := chromedp.Run(ctx, chromedp.Nodes(`//*[@id="HidSessionId"]`, &nodes)); err != nil {
-		log.Panic("Failed to get nodes of HidSessionId: %w", err)
-	}
-
-	// Cookie(ASP.NET_SessionId) の取得
-	var id model.Id
-	for _, n := range nodes {
-		id.SessId = n.AttributeValue("value")
-	}
-
 	// ユニットの選択と処理
 	for i := 1; i < nodeNum+1; i++ {
 		log.Println("- * - * - * - * -")
 		log.Printf("%d/%d開始\n\n", i, nodeNum)
 
-		if id, err = tasks.GetId(ctx, i); err != nil {
+		id, stcnt, err := tasks.GetInfo(ctx, i)
+		if err != nil {
 			log.Panic(err)
 		}
+
 		if id.CId != "ex.TC1" {
-			tasks.Submit(id.SessId, id)
+			if err := tasks.Submit(id, stcnt); err != nil {
+				log.Panic(err)
+			}
 		}
 
 		log.Printf("%d/%d完了", i, nodeNum)

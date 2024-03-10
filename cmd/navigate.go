@@ -14,7 +14,7 @@ import (
 
 func pwh(ctx context.Context, subcID int) error {
 	if err := chromedp.Run(ctx,
-		chromedp.Click(`//*[@onclick="javascript: GoToStUnitList_Click('PWH_L0`+fmt.Sprint(subcID)+`')"]`,
+		chromedp.Click(`//*[@id="DivAllSubCourseTable"]/table/tbody/tr/td[2]/table/tbody/tr[`+fmt.Sprint(subcID)+`]/td[1]/a`,
 			chromedp.NodeVisible),
 	); err != nil {
 		return xerrors.Errorf("Failed to select subcourse pwh: %w", err)
@@ -24,7 +24,7 @@ func pwh(ctx context.Context, subcID int) error {
 
 func tc1(ctx context.Context, subcID int) error {
 	if err := chromedp.Run(ctx,
-		chromedp.Click(`//*[@onclick="javascript: GoToStUnitList_Click('TC1_S`+fmt.Sprint(subcID)+`')"]`,
+		chromedp.Click(`//*[@id="DivAllSubCourseTable"]/table/tbody/tr/td[2]/table/tbody/tr[`+fmt.Sprint(subcID)+`]/td[1]/a`,
 			chromedp.NodeVisible),
 	); err != nil {
 		return xerrors.Errorf("Failed to select subcourse tc1: %w", err)
