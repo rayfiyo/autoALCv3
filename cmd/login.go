@@ -15,14 +15,11 @@ import (
 )
 
 func passwdInputer(labelMessage string) (string, error) {
-	// validate := func(input string) error {
-	// return nil
-	// }
+	// パスワードとしてありえない値のエラーハンドリングなどはしていない
 
 	prompt := promptui.Prompt{
 		Label: labelMessage,
-		// Validate: validate,
-		Mask: '*',
+		Mask:  '*',
 	}
 
 	passwd, err := prompt.Run()
