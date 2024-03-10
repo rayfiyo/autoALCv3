@@ -1,7 +1,8 @@
 # autoALCv3
 
-- ALC を自動化でやる 3 版です / This is the 3rd edition of ALC with automation
+- ALC を自動化でやる 第３版 / This is the 3rd edition of ALC with automation
 - サーバーに負荷をかけないために，遅延大きめで実装
+- Google Chrome を利用している（依存している）ので，Google Chrome のインストールが事前に必要
 
 # Usage
 
