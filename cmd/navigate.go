@@ -33,7 +33,7 @@ func tc1(ctx context.Context, subcID int) error {
 }
 
 func Navigate(ctx context.Context, crsID, subcID int) error {
-	log.Printf("Start navigation\n")
+	log.Println("Start  navigation")
 
 	// コースの選択
 	if err := chromedp.Run(ctx,
@@ -59,6 +59,6 @@ func Navigate(ctx context.Context, crsID, subcID int) error {
 
 	time.Sleep(2 * time.Second) // 遷移待ち
 
-	log.Printf("Finish navigation\n\n")
+	log.Println("Finish navigation")
 	return nil
 }
