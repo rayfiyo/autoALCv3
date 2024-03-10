@@ -52,22 +52,33 @@ func start(id model.Id) (string, string, error) {
 }
 
 func end(id model.Id, stCnt int, sdate string) (string, string, error) {
-	stepSection := ""
+	// ステップの数に応じた数の偽装データを作成
+	solvedStepData := ""
 	for i := 0; i < stCnt; i++ {
 		if i > 0 {
-			stepSection += `,`
+			solvedStepData += `,`
 		}
 		// SOrder は自然数で管理しているのでインクリメント
-		stepSection += `{"SOrder":"` + fmt.Sprint(i+1) + `","SFlag":"1","Voca":"1"}`
+		solvedStepData += `{"SOrder":"` + fmt.Sprint(i+1) + `","SFlag":"1","Voca":"1"}`
+	}
+
+	// スキルポイントの調整 // [note] スキルポイントは要改善
+	skillPointData := "   L,S,R,W,G,V"
+	if strings.Contains(id.UId, "PWH") {
+		skillPointData = "0,0,0,0,0,10"
+	} else if strings.Contains(id.UId, "TC") {
+		skillPointData = "10,0,0,0,0,0"
+	} else {
+		skillPointData = "0,0,0,0,0,0"
+		log.Println("PWH または TC ではないと判定しました．スキルポイントは０に設定します．")
 	}
 
 	// クライアント新規作成
 	client := &http.Client{}
 	data := strings.NewReader(
-		`{"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[` + stepSection +
+		`{"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[` + solvedStepData +
 			`]}},"SDate":"` + sdate +
-			// [note] スキルポイントは要改善
-			`","Skill":"` + fmt.Sprint(10*stCnt) + `,0,0,0,0,0","VId":"ALC","CId":"` + id.CId +
+			`","Skill":"` + skillPointData + `","VId":"ALC","CId":"` + id.CId +
 			`","SId":"` + id.SId +
 			`","UId":"` + id.UId +
 			`","SessionId":"` + id.SessId + `"}`,
