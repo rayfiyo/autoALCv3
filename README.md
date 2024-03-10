@@ -1,6 +1,11 @@
 # autoALCv3
 ALCを自動化でやる3版です/This is the 3rd edition of ALC with automation
 
+# Note
+* 現在，付与されるポイントの項目が全て，L（リスニング？）になる仕様です．
+* TOEICではない方（PWH）や，TOEICの一部問題では，本来付与される項目とは異なる項目にポイントが付与されることに気をつけてください．
+* 2024年3月11日 継続中
+
 # Usage
 ## login
 ### ID:
