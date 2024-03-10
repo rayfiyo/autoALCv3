@@ -53,11 +53,13 @@ func start(id model.Id) (string, string, error) {
 
 func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 	stepSection := ""
+	stCnt = 5
 	for i := 0; i < stCnt; i++ {
 		if i > 0 {
 			stepSection += `,`
 		}
-		stepSection += `{"SOrder":"` + fmt.Sprint(i) + `","SFlag":"1","Voca":"1"}`
+		// SOrder は自然数で管理しているのでインクリメント
+		stepSection += `{"SOrder":"` + fmt.Sprint(i+1) + `","SFlag":"1","Voca":"1"}`
 	}
 	// {"SOrder":"1","SFlag":"1","Voca":"1"},
 	// {"SOrder":"2","SFlag":"1","Voca":"1"},
@@ -68,17 +70,19 @@ func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 	// クライアント新規作成
 	client := &http.Client{}
 	data := strings.NewReader(
-		`{"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[` + stepSection + `]}},"SDate":"` + sdate + `","Skill":"50,0,0,0,0,0","VId":"ALC","CId":"` + id.CId +
+		`{"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[` + stepSection +
+			`]}},"SDate":"` + sdate +
+			`","Skill":"` + fmt.Sprint(10*stCnt) + `,0,0,0,0,0","VId":"ALC","CId":"` + id.CId +
 			`","SId":"` + id.SId +
 			`","UId":"` + id.UId +
 			`","SessionId":"` + id.SessId + `"}`,
 	)
 
-	log.Print("send: ", data, "\n")
+	// log.Print("stCnd: ", stCnt, "\n")
+	// log.Print("send: ", data, "\n")
+	// log.Print("want: ", `__{"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[{"SOrder":"1","SFlag":"1","Voca":"1"},{"SOrder":"2","SFlag":"1","Voca":"1"},{"SOrder":"3","SFlag":"1","Voca":"1"},{"SOrder":"4","SFlag":"1","Voca":"1"},{"SOrder":"5","SFlag":"1","Voca":"1"}]}},"SDate":"`+sdate+`","Skill":"50,0,0,0,0,0","VId":"ALC","CId":"`+id.CId+`","SId":"`+id.SId+`","UId":"`+id.UId+`","SessionId":"`+id.SessId+`"}`, "\n")
 
-	log.Print("want: ", `{"FId":"02","LCD":"1","LInfo":{"FID02":{"StepSection02":[{"SOrder":"1","SFlag":"1","Voca":"1"},{"SOrder":"2","SFlag":"1","Voca":"1"},{"SOrder":"3","SFlag":"1","Voca":"1"},{"SOrder":"4","SFlag":"1","Voca":"1"},{"SOrder":"5","SFlag":"1","Voca":"1"}]}},"SDate":"`+sdate+`","Skill":"50,0,0,0,0,0","VId":"ALC","CId":"`+id.CId+`","SId":"`+id.SId+`","UId":"`+id.UId+`","SessionId":"`+id.SessId+`"}`, "\n")
-
-	time.Sleep(12 * time.Minute)
+	// time.Sleep(12 * time.Minute)
 
 	// リクエスト新規作成
 	req, err := http.NewRequest("POST", "https://nanext.alcnanext.jp/anetn/api/HistoryApi/registLearnHistory", data)
