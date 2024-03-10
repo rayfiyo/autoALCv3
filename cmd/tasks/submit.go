@@ -48,12 +48,11 @@ func start(id model.Id) (string, string, error) {
 	}
 
 	// ex.{"Result":"0","Estep":null,"SDate":"20240310233816521"}
-	return fmt.Sprintf("%s\n", bodyText), fmt.Sprintln(data), nil
+	return string(bodyText), fmt.Sprintln(data), nil
 }
 
 func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 	stepSection := ""
-	stCnt = 5
 	for i := 0; i < stCnt; i++ {
 		if i > 0 {
 			stepSection += `,`
@@ -98,7 +97,7 @@ func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 	}
 
 	// ex.{"Result":"0","EDate":"20240226231503751","TTime":"148"}
-	return fmt.Sprintf("%s\n", bodyText), fmt.Sprintln(data), nil
+	return string(bodyText), fmt.Sprintln(data), nil
 }
 
 func Submit(id model.Id, stCnt int) error {
@@ -115,12 +114,20 @@ func Submit(id model.Id, stCnt int) error {
 		if string(res[1:13]) == `"Result":"0"` {
 			for j := 0; j+1 < len(res); j++ {
 				if string(res[j:j+1]) == "S" {
-					sdate = string(res[j+8 : len(res)-3])
+					sdate = string(res[j+8 : len(res)-2])
 				}
 			}
-			if sdate == "null" { // sdate が不正な値（厳密にはnullのみ）ではないか調べる
+
+			// sdate が null（不正な値）ではないか調べる
+			if sdate == "null" {
 				return xerrors.Errorf("SDate is null @start: %w\n Response: %s\nSend data: %s\n", err, res, data)
 			}
+
+			// sdate が 17文字ではない文字数（不正な値）ではないか調べる．Count の "" は Unicode コードポイントの数 + 1 を返す
+			if strings.Count(sdate, "")-1 != 17 {
+				return xerrors.Errorf("SDate is null @start: %w\n Response: %s\nSend data: %s\n", err, res, data)
+			}
+
 			break
 		}
 
