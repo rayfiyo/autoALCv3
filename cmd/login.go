@@ -15,14 +15,11 @@ import (
 )
 
 func passwdInputer(labelMessage string) (string, error) {
-	// validate := func(input string) error {
-	// return nil
-	// }
+	// パスワードとしてありえない値のエラーハンドリングなどはしていない
 
 	prompt := promptui.Prompt{
 		Label: labelMessage,
-		// Validate: validate,
-		Mask: '*',
+		Mask:  '*',
 	}
 
 	passwd, err := prompt.Run()
@@ -34,11 +31,11 @@ func passwdInputer(labelMessage string) (string, error) {
 }
 
 func Login(ctx context.Context) error {
-	log.Printf("Start Login\n")
+	log.Println("Start  Login")
 
 	// クレデンシャルの入力要求
 	id := "ID"
-	fmt.Printf("ID:")
+	fmt.Print("ID: ")
 	fmt.Scan(&id)
 
 	if passwd, err := passwdInputer("Password: "); err != nil {
@@ -57,6 +54,6 @@ func Login(ctx context.Context) error {
 		time.Sleep(1 * time.Second)
 	}
 
-	log.Printf("Finish Login\n\n")
+	log.Println("Finish Login")
 	return nil
 }

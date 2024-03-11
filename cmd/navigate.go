@@ -1,4 +1,4 @@
-// コースまでの遷移（ナビゲーション）
+// コースまでの遷移 (navigate)
 
 package cmd
 
@@ -14,7 +14,7 @@ import (
 
 func pwh(ctx context.Context, subcID int) error {
 	if err := chromedp.Run(ctx,
-		chromedp.Click(`//*[@onclick="javascript: GoToStUnitList_Click('PWH_L0`+fmt.Sprint(subcID)+`')"]`,
+		chromedp.Click(`//*[@id="DivAllSubCourseTable"]/table/tbody/tr/td[2]/table/tbody/tr[`+fmt.Sprint(subcID)+`]/td[1]/a`,
 			chromedp.NodeVisible),
 	); err != nil {
 		return xerrors.Errorf("Failed to select subcourse pwh: %w", err)
@@ -24,7 +24,7 @@ func pwh(ctx context.Context, subcID int) error {
 
 func tc1(ctx context.Context, subcID int) error {
 	if err := chromedp.Run(ctx,
-		chromedp.Click(`//*[@onclick="javascript: GoToStUnitList_Click('TC1_S`+fmt.Sprint(subcID)+`')"]`,
+		chromedp.Click(`//*[@id="DivAllSubCourseTable"]/table/tbody/tr/td[2]/table/tbody/tr[`+fmt.Sprint(subcID)+`]/td[1]/a`,
 			chromedp.NodeVisible),
 	); err != nil {
 		return xerrors.Errorf("Failed to select subcourse tc1: %w", err)
@@ -33,7 +33,7 @@ func tc1(ctx context.Context, subcID int) error {
 }
 
 func Navigate(ctx context.Context, crsID, subcID int) error {
-	log.Printf("Start navigation\n")
+	log.Println("Start  navigation")
 
 	// コースの選択
 	if err := chromedp.Run(ctx,
@@ -46,8 +46,6 @@ func Navigate(ctx context.Context, crsID, subcID int) error {
 	// サブコースの選択
 	switch crsID {
 	case 1:
-		subcID = 3 // デバック用
-
 		// PowerWords Hybridコース
 		if err := pwh(ctx, subcID); err != nil {
 			return err
@@ -61,6 +59,6 @@ func Navigate(ctx context.Context, crsID, subcID int) error {
 
 	time.Sleep(2 * time.Second) // 遷移待ち
 
-	log.Printf("Finish navigation\n\n")
+	log.Println("Finish navigation")
 	return nil
 }
