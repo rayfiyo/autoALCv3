@@ -5,13 +5,26 @@
 - Google Chrome を利用している（依存している）ので，Google Chrome のインストールが事前に必要
 
 # Download
-- 事前準備として、```Google Chrome``` をインストールしておく
+
+- 事前準備として、`Google Chrome` をインストールしておく
+
 ## Windows
-- ```bin``` のディレクトリの，```main.exe``` をダウンロードする
+
+次のどちらかの方法がある
+
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/tag/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
+
 ## Linux
-- ```bin``` のディレクトリの，```main``` をダウンロードする
+
+次のどちらかの方法がある
+
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/tag/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
+
 ## その他/動かない場合
-- このレポジトリをクローンし，```go build main.go```を行い，生成されたバイナリを実行する
+
+- このレポジトリをクローンし，`go build main.go`を行い，生成されたバイナリを実行する
 
 # Usage
 
