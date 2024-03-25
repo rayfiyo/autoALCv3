@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	fmt.Print("現在，付与されるスキルポイントが正しくない場合があります．詳しくは README を参照してください．\n\n")
+	fmt.Print("現在，付与されるスキルポイントが正しくない場合が報告されてます．詳しくは README を参照してください．\n\n")
 
 	// Chrome のインスタンス作成（画面サイズをPCとして行う）
 	// /* Release:
@@ -43,7 +43,7 @@ func main() {
 	log.Println("Start     access to top page")
 	if err := chromedp.Run(ctx,
 		chromedp.Navigate("https://nanext.alcnanext.jp/anetn/Student/stlogin/index/nit-ariake/")); err != nil {
-		log.Panic("Error: Failed access to top page", err)
+		log.Panic("Failed access to top page\n", err)
 	}
 	log.Println("Finish of access to top page")
 
@@ -52,7 +52,7 @@ func main() {
 		log.Panic(err)
 	}
 	if err := check.URL(ctx, "https://nanext.alcnanext.jp/anetn/Student/StTop"); err != nil {
-		log.Panic("ID か パスワードが間違っている可能性があります", err)
+		log.Panic("ID or Password is likely wrong.\n", err)
 	}
 
 	// コースの選択
@@ -90,7 +90,7 @@ Loop:
 
 	// 遷移の確認
 	if err := check.URL(ctx, "https://nanext.alcnanext.jp/anetn/Student/StUnitList"); err != nil {
-		log.Panic("コース・サブコースの選択に失敗", err)
+		log.Panic("Failure to select a course or sub-course\n", err)
 	}
 
 	// リンクがある行数（ノード数）を取得
@@ -119,5 +119,5 @@ Loop:
 		log.Printf("- * - * - * - * -\n\n")
 	}
 
-	log.Println("すべての処理が完了しました．")
+	fmt.Println("すべての処理が完了しました．")
 }
