@@ -94,7 +94,7 @@ Loop:
 	}
 
 	// リンクがある行数（ノード数）を取得
-	nodeNum, err := cmd.NodeCount(ctx, `//*[@id="nan-contents"]/div[7]/div/table/tbody/tr`, chromedp.AtLeast(7))
+	nodeNum, err := cmd.NodeCount(ctx, `//*[@id="nan-contents"]/div[7]/div/table/tbody/tr`, chromedp.AtLeast(1))
 	if err != nil {
 		log.Panic(err)
 	}
