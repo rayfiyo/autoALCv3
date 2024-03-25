@@ -88,7 +88,7 @@ func GetInfo(ctx context.Context, selNode int) (model.Id, int, error) {
 			return id, stCnt, xerrors.Errorf("Failed to click on drill unit: %w", err)
 		}
 
-		// [note] slpArgって，マップで持った方がいいよね？
+		// [NOTE] slpArgって，マップで持った方がいいよね？
 
 		// ex.     "PWH_L03_U024-2", "U024",   "10",           "",         "UNIT024",   "2", "&STCnt1=&STCnt2=&STCnt3=&STCnt4="}
 		slpArg := []string{"unitId", "unitNo", "unitDivision", "unitType", "unitTitle", "deviceType", "unitTrainingCount"}

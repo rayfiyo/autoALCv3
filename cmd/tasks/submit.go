@@ -62,15 +62,19 @@ func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 		solvedStepData += `{"SOrder":"` + fmt.Sprint(i+1) + `","SFlag":"1","Voca":"1"}`
 	}
 
-	// スキルポイントの調整 // [note] スキルポイントは要改善
+	// スキルポイントの調整 // [NOTE] スキルポイントは要改善
 	skillPointData := "   L,S,R,W,G,V"
 	if strings.Contains(id.UId, "PWH") {
 		skillPointData = "0,0,0,0,0,10"
 	} else if strings.Contains(id.UId, "TC") {
 		skillPointData = "10,0,0,0,0,0"
+	} else if strings.Contains(id.UId, "JT") {
+		skillPointData = "0,0,0,0,0,0"
+	} else if strings.Contains(id.UId, "KT") {
+		skillPointData = "0,0,0,0,0,0" // 点数なし
 	} else {
 		skillPointData = "0,0,0,0,0,0"
-		log.Println("PWH または TC ではないと判定しました．スキルポイントは０に設定します．")
+		log.Println("未登録の種類です，スキルポイントを０で設定します．")
 	}
 
 	// クライアント新規作成
