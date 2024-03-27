@@ -12,14 +12,14 @@
 
 次のどちらかの方法がある
 
-1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/tag/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする
 2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
 
 ## Linux
 
 次のどちらかの方法がある
 
-1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/tag/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする
 2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
 
 ## その他/動かない場合
@@ -65,6 +65,8 @@
 
 - PWH の場合: V に 10 ポイント
 - TC 系（TOEIC）: L に 10 ポイント
+- JT（実力テスト）: V に 30 ポイント
+- KT（確認テスト）: 0 ポイント // 本来はスキルポイントのペイロードがない？
 - それ以外の場合: 0 ポイント
 
 ## 対処
