@@ -134,7 +134,12 @@ func GetInfo(ctx context.Context, selNode int) (model.Id, int, error) {
 		// &STCnt.= の数を数える
 		stCnt = strings.Count(slpArg[len(slpArg)-1], "&STCnt")
 
-		// stCnt が１未満だったら（実力テストなど），１として処理
+		// 実力テストと確認テストはうまく数えられないので適当に７つとしておく // [NOTE]要改善
+		if strings.Contains(id.UId, "_JT") || strings.Contains(id.UId, "_KT") {
+			stCnt = 7
+		}
+
+		// stCnt が１未満だったら，１として処理
 		if stCnt < 1 {
 			stCnt = 1
 		}
