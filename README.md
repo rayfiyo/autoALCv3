@@ -12,14 +12,14 @@
 
 次のどちらかの方法がある
 
-1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/tag/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする
 2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
 
 ## Linux
 
 次のどちらかの方法がある
 
-1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/tag/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする
 2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
 
 ## その他/動かない場合
