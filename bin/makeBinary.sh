@@ -13,8 +13,8 @@ if [ -d bin ]; then
     GOOS=linux GOARCH=arm go build -o "./bin/autoALCv3_linux_arm"
     GOOS=linux GOARCH=arm64 go build -o "./bin/autoALCv3_linux_arm64"
 
-    GOOS=darwin GOARCH=amd64 go build -o "./bin/autoALCv3_mac_amd64.command"
-    GOOS=darwin GOARCH=arm64 go build -o "./bin/autoALCv3_mac_arm64.command"
+    GOOS=darwin GOARCH=amd64 go build -o "./bin/autoALCv3_mac_amd64"
+    GOOS=darwin GOARCH=arm64 go build -o "./bin/autoALCv3_mac_arm64"
 fi
 
 echo "Finish"

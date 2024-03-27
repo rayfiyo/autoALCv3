@@ -23,6 +23,7 @@ func start(id model.Id) (string, string, error) {
 			`","UId":"` + id.UId +
 			`","SessionId":"` + id.SessId + `"}`,
 	)
+	log.Println(data)
 
 	// リクエスト新規作成
 	req, err := http.NewRequest("POST", "https://nanext.alcnanext.jp/anetn/api/HistoryApi/registStartHistory", data)
@@ -69,11 +70,11 @@ func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 	} else if strings.Contains(id.UId, "TC") {
 		skillPointData = "10,0,0,0,0,0"
 	} else if strings.Contains(id.UId, "JT") {
-		skillPointData = "0,0,0,0,0,0"
+		skillPointData = "0,0,0,0,0,0" // 点数なし
 	} else if strings.Contains(id.UId, "KT") {
 		skillPointData = "0,0,0,0,0,0" // 点数なし
 	} else {
-		skillPointData = "0,0,0,0,0,0"
+		skillPointData = "0,0,0,0,0,0" // 点数なし
 		log.Println("未登録の種類です，スキルポイントを０で設定します．")
 	}
 
@@ -87,6 +88,7 @@ func end(id model.Id, stCnt int, sdate string) (string, string, error) {
 			`","UId":"` + id.UId +
 			`","SessionId":"` + id.SessId + `"}`,
 	)
+	log.Println(data)
 
 	// リクエスト新規作成
 	req, err := http.NewRequest("POST", "https://nanext.alcnanext.jp/anetn/api/HistoryApi/registLearnHistory", data)
