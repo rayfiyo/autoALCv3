@@ -12,14 +12,20 @@
 
 次のどちらかの方法がある
 
-1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする（autoALCv3_windows_アーキテクチャ.exe）
+2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
+
+## MacOS
+
+MacOS 10.12 Sierra 以降では，次のどちらかの方法がある
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする（autoALCv3_mac_アーキテクチャ.command）
 2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
 
 ## Linux
 
 次のどちらかの方法がある
 
-1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする
+1. [こちらの Release](https://github.com/rayfiyo/autoALCv3/releases/latest)から，一致するアーキテクチャのバイナリをダウンロードする（autoALCv3_linux_アーキテクチャ）
 2. `bin` のディレクトリの，一致するアーキテクチャのバイナリをダウンロードする
 
 ## その他/動かない場合
