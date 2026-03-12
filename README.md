@@ -1,5 +1,7 @@
 # autoALCv3
 
+このレポジトリは https://github.com/rayfiyo/autoALCv4 に移行しました。
+
 - ALC を自動でやる 3 版
 - This is the 3rd edition of ALC with automation
 - 依存関係: Google Chrome
